@@ -18,6 +18,8 @@ Diagnostics:
       readability-redundant-access-specifiers,
       modernize-avoid-c-arrays,
       readability-math-missing-parentheses,
+      modernize-use-trailing-return-type,
+      readability-convert-member-functions-to-static
     ]
 
     CheckOptions:
