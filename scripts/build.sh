@@ -1,5 +1,5 @@
-export CC=clang
-export CXX=clang++
+export CC=${CC:-clang}
+export CXX=${CXX:-clang++}
 
 set -e  # Exit on error
 
