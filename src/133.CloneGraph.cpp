@@ -28,52 +28,50 @@ public:
 class Solution
 {
 public:
-    Node* dfs(Node* oldNode)
+    Node* dfs(Node* curNode)
     {
-        if (oldNode == nullptr) {
-            return oldNode;
+        if (curNode == nullptr) {
+            return curNode;
         }
 
-        auto newNodeIt = hash.find(oldNode);
+        auto newNodeIt = hash.find(curNode);
         if (newNodeIt != hash.end()) {
             return newNodeIt->second;
         }
 
-        auto* newNode = new Node();
-        newNode->val = oldNode->val;
-        hash[oldNode] = newNode;
+        auto* newNode = new Node(curNode->val);
+        hash[curNode] = newNode;
 
-        for (auto* neighbor : oldNode->neighbors) {
+        for (auto* neighbor : curNode->neighbors) {
             newNode->neighbors.push_back(dfs(neighbor));
         }
 
         return newNode;
     }
 
-    Node* bfs(Node* oldNode)
+    Node* bfs(Node* curNode)
     {
-        auto q = ::std::queue<Node*>();
-        if (oldNode == nullptr) {
-            return oldNode;
+        if (curNode == nullptr) {
+            return curNode;
         }
-        auto* newNode = new Node();
-        newNode->val = oldNode->val;
-        hash[oldNode] = newNode;
-        q.push(oldNode);
+
+        auto q = ::std::queue<Node*>();
+        q.push(curNode);
+        hash[curNode] = new Node(curNode->val);
         for (; !q.empty();) {
             auto* front = q.front();
             q.pop();
+
             for (auto* neighbor : front->neighbors) {
                 if (!hash.contains(neighbor)) {
-                    auto* newNeighbor = new Node();
-                    newNeighbor->val = neighbor->val;
-                    hash[neighbor] = newNeighbor;
+                    hash[neighbor] = new Node(neighbor->val);
                     q.push(neighbor);
                 }
                 hash[front]->neighbors.push_back(hash[neighbor]);
             }
         }
-        return newNode;
+
+        return hash[curNode];
     }
 
     Node* cloneGraph(Node* node)
