@@ -1,3 +1,7 @@
+#include "./pch.hpp"
+
+constexpr bool USE_BACKTRACE_2 = true;
+
 class Solution
 {
 public:
@@ -7,11 +11,18 @@ public:
             return {};
         }
         this->n2str = {
-            {'2', "abd"}, {'3', "def"},  {'4', "ghi"}, {'5', "jkl"},
+            {'2', "abc"}, {'3', "def"},  {'4', "ghi"}, {'5', "jkl"},
             {'6', "mno"}, {'7', "pqrs"}, {'8', "tuv"}, {'9', "wxyz"},
         };
 
-        return backtrace(digits, 0);
+        if constexpr (USE_BACKTRACE_2) {
+            auto result = vector<string>();
+            auto curComb = string();
+            this->backtrace2(digits, 0, result, curComb);
+            return result;
+        } else {
+            return backtrace(digits, 0);
+        }
     }
 
 private:
@@ -32,6 +43,20 @@ private:
             }
         }
         return combs;
+    }
+
+    void backtrace2(const string& digits, int n, vector<string>& allCombs,
+                    string& curComb)
+    {
+        if (n == int(digits.size())) {
+            allCombs.push_back(curComb);
+            return;
+        }
+        for (char ch : this->n2str[digits.at(n)]) {
+            curComb.push_back(ch);
+            this->backtrace2(digits, n + 1, allCombs, curComb);
+            curComb.pop_back();
+        }
     }
 
     unordered_map<char, string> n2str;
